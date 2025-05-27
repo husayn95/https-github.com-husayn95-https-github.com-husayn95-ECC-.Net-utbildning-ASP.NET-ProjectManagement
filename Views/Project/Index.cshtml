@@ -1,0 +1,132 @@
+@model IEnumerable<ProjectManagementApp.Models.Project>
+@{
+    ViewData["Title"] = "Alla Projekt";
+    var status = ViewData["CurrentStatus"]?.ToString() ?? "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<!-- Viss html och tailwind fick jag hjälp av chatgpt -->
+
+<body class="bg-gray-100 min-h-screen font-sans ml-0">
+    <div class="flex h-screen">
+
+        <div class="w-1/6 bg-white p-6 h-screen shadow-md">
+            <div class="flex items-center mb-8">
+                <span
+                    class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">alpha</span>
+            </div>
+            <a href="#"
+                class="flex items-center py-3 px-4 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition duration-300">
+                <i class="fas fa-folder mr-3"></i> Projects
+            </a>
+        </div>
+
+        <div class="flex-1 p-8 overflow-auto ml-0">
+            <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-lg shadow-md">
+                <h1 class="text-3xl font-bold text-gray-800">Projects</h1>
+                <div class="flex items-center space-x-4">
+                    <a asp-action="Create"
+                        class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 flex items-center transition duration-300">
+                        <i class="fas fa-plus mr-2"></i> Add Project
+                    </a>
+                    <div class="relative">
+                        <button id="profileBtn" aria-haspopup="true" aria-expanded="false" class="focus:outline-none">
+                            <img src="https://via.placeholder.com/40" alt="User Profile"
+                                class="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer" />
+                        </button>
+
+                        <div id="profileDropdown"
+                            class="hidden absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-lg py-2 z-50"
+                            role="menu" aria-label="User menu">
+                            <span class="block px-4 py-2 text-gray-700 cursor-default select-none">
+                                @ViewBag.UserFullName
+                            </span>
+
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="block">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-4 mb-8 ml-0">
+                <a asp-action="Index" asp-route-status=""
+                    class="px-5 py-2 rounded-full font-semibold transition duration-300 @(status == "" ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                    ALL (@Model.Count())
+                </a>
+                <a asp-action="Index" asp-route-status="Started"
+                    class="px-5 py-2 rounded-full font-semibold transition duration-300 @(status == "Started" ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                    STARTED (@Model.Count(p => p.Status.ToString() == "Started"))
+                </a>
+                <a asp-action="Index" asp-route-status="Completed"
+                    class="px-5 py-2 rounded-full font-semibold transition duration-300 @(status == "Completed" ? "bg-gradient-to-r from-blue-600 to-indigo-500 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                    COMPLETED (@Model.Count(p => p.Status.ToString() == "Completed"))
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @foreach (var item in Model)
+                {
+                    <div
+                        class="bg-white rounded-xl shadow-md p-6 transform transition duration-300 hover:scale-105 hover:shadow-lg">
+                        <div
+                            class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-600 to-pink-600 border-2 border-white shadow-sm">
+                            <img src="https://via.placeholder.com/40?text=A" alt="Project Logo"
+                                class="w-10 h-10 object-contain filter invert brightness-0" />
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2 text-center text-gray-800">@item.ProjectName</h3>
+                        <p class="text-gray-600 text-sm text-center mb-3">@item.ClientName</p>
+                        <p class="text-gray-500 text-sm text-center mb-4 italic">
+                            It is necessary to develop the project.
+                        </p>
+                        <div class="text-gray-600 text-sm mb-4 space-y-1">
+                            <p class="flex items-center justify-between">
+                                <span class="font-medium">Start:</span>
+                                <span>@item.StartDate?.ToShortDateString()</span>
+                            </p>
+                            <p class="flex items-center justify-between">
+                                <span class="font-medium">End:</span>
+                                <span>@item.EndDate?.ToShortDateString()</span>
+                            </p>
+                            <p class="flex items-center justify-between">
+                                <span class="font-medium">Status:</span>
+                                <span>@item.Status</span>
+                            </p>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                class="text-blue-600 hover:underline hover:text-blue-800 transition duration-300">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                class="text-blue-600 hover:underline hover:text-blue-800 transition duration-300">Delete</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

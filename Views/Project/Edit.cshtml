@@ -1,0 +1,65 @@
+@model ProjectManagementApp.Models.Project
+@{
+    ViewData["Title"] = "Add Project";
+}
+
+<div class="container">
+    <h2 class="mb-4">Edit Project</h2>
+
+    <form asp-action="Edit" id="projectForm">
+        <div class="mb-3">
+            <label asp-for="ProjectName" class="form-label"></label>
+            <input asp-for="ProjectName" class="form-control" />
+            <span asp-validation-for="ProjectName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ClientName" class="form-label"></label>
+            <input asp-for="ClientName" class="form-control" />
+            <span asp-validation-for="ClientName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StartDate" class="form-label"></label>
+            <input asp-for="StartDate" type="date" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EndDate" class="form-label"></label>
+            <input asp-for="EndDate" type="date" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Budget" class="form-label"></label>
+            <input asp-for="Budget" type="number" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<ProjectStatus>()" class="form-control"></select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
+</div>
+
+
+<!-- Fick hjälp av chatgpt här -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('projectForm').addEventListener('submit', function (e) {
+            const name = document.getElementById('Name').value;
+            if (!name || name.length < 3) {
+                alert('Projektnamnet måste vara längre än 3 tecken.');
+                e.preventDefault();
+            }
+        });
+    </script>
+}

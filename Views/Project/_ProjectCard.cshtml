@@ -1,0 +1,13 @@
+@model ProjectManagementApp.Models.Project
+
+<div class="card h-100 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">@Model.ProjectName</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.ClientName</h6>
+        <p class="card-text">@Model.Description</p>
+    </div>
+    <div class="card-footer bg-transparent d-flex justify-content-between">
+        <a href="/Projects/Edit/@Model.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+        <a href="/Projects/Delete/@Model.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+    </div>
+</div>

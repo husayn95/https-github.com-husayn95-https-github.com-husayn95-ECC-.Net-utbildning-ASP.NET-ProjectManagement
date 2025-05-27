@@ -1,0 +1,33 @@
+/* Fick hjälp av chatgpt att framställa denna kod*/
+
+.error {
+  border-color: #e74c3c !important;
+  background-color: #fdf2f2;
+}
+
+.valid {
+  border-color: #27ae60 !important;
+  background-color: #f2fdf2;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.success-message {
+  color: #27ae60;
+  font-size: 12px;
+  margin-top: 5px;
+  display: none;
+}
+
+.success-message.show {
+  display: block;
+}

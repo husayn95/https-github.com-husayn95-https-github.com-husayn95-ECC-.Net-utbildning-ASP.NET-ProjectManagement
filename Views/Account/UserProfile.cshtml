@@ -1,0 +1,114 @@
+@model ProjectManagementApp.Models.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "User Profile";
+    Layout = "_Layout";
+}
+
+<div class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-8 px-4 md:px-0">
+        <!-- Page Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-800">My Profile</h1>
+            <form asp-action="Logout" asp-controller="Account" method="post">
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+                    Logout
+                </button>
+            </form>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span class="text-4xl font-bold text-blue-500">@Model.Initials</span>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-gray-800">@Model.FullName</h2>
+                    <p class="text-gray-600">@Model.Email</p>
+                    <p class="text-gray-500 text-sm mt-1">Member since @Model.JoinDate.ToString("MMMM yyyy")</p>
+
+                    <div class="mt-4 border-t pt-4">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <p class="font-medium text-gray-600">Account Status:</p>
+                                <p class="text-green-500 font-medium">Active</p>
+                            </div>
+                            <a href="#" class="text-blue-500 hover:text-blue-600 mt-2 md:mt-0">Change password</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-medium text-gray-700 mb-2">Active Projects</h3>
+                <p class="text-3xl font-bold text-blue-500">@Model.StartedProjects</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-medium text-gray-700 mb-2">Completed Tasks</h3>
+                <p class="text-3xl font-bold text-green-500">@Model.CompletedTasks</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
+
+            @if (Model.RecentActivities.Any())
+            {
+                <ul class="divide-y divide-gray-200">
+                    @foreach (var activity in Model.RecentActivities)
+                    {
+                        <li class="py-3">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1">
+                                    @if (activity.Type == "Project")
+                                    {
+                                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                            </svg>
+                                        </div>
+                                    }
+                                    else if (activity.Type == "Task")
+                                    {
+                                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">@activity.Description</p>
+                                    <p class="text-xs text-gray-500">@activity.Date.ToString("MMM dd, yyyy - HH:mm")</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-gray-500 text-center py-4">No recent activity to display</p>
+            }
+        </div>
+    </div>
+</div>
